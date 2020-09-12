@@ -2,7 +2,7 @@ import Foundation
 
 class Heap<T: Hashable & Equatable> {
     var array: [T] = [T]()
-    var map = [T: Int]()
+    var map = [T: Set<Int>]()
     var compareCallback: (T, T) -> Bool
     var top: T? {
         return array.first
@@ -79,22 +79,32 @@ class Heap<T: Hashable & Equatable> {
     }
 
     func remove(_ object: T) {
-        guard let index = map[object] else { return }
-        swapAt(index, array.count - 1)
-        removeLast()
-        heapifyUP(index)
-        heapifyDown(index)
+        var last = 0
+        for index in map[object] ?? [] {
+            swapAt(index, array.count - 1)
+            removeLast()
+            last = index
+           
+        } 
+
+        heapifyUP(last)
+        heapifyDown(last)
     }
 
     func swapAt(_ first: Int, _ second: Int) {
-        map[array[first]] = second
-        map[array[second]] = first
+        if map[array[first]] == nil { map[array[first]] = [] }
+        if map[array[second]] == nil { map[array[second]] = [] }
+        map[array[first]]?.remove(first)
+        map[array[second]]?.remove(second)
+        map[array[first]]?.insert(second)
+        map[array[second]]?.insert(first)
         array.swapAt(first, second)
     }
 
     func removeLast() -> T? {
         let index = array.count - 1
-        map[array[index]] = nil
-        return array.removeLast()
+        map[array[index]]?.remove(index)
+        if array.isEmpty { return array.removeLast() }
+        return nil
     }
 }
