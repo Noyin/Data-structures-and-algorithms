@@ -2,13 +2,15 @@ import Foundation
 
 class Heap<T> {
     var array: [T] = [T]()
-    var callback: (T, T) -> Bool
+    var compareCallback: (T, T) -> Bool
+    var equalCallback: (T, T) -> Bool?
     var top: T? {
         return array.first
     }
 
-    init(_ callback: @escaping (T, T) -> Bool) {
-        self.callback = callback
+    init(_ compareCallback: @escaping (T, T) -> Bool, _ equalCallback: @escaping (T, T) -> Bool = nil) {
+        self.compareCallback = compareCallback
+        self.equalCallback = equalCallback
     }
 
     func enqueue(_ element: T) {
@@ -24,12 +26,16 @@ class Heap<T> {
         return last
     }
 
-    func heapifyUP() {
+    func heapifyUP(_ start: Int? = nil) {
         var index = array.count - 1
+        if let start = start {
+            index = start
+        }
+
         while 0 <= index {
             let parent = index >> 1
             if parent == index { return }
-            if callback(array[parent], array[index]) {
+            if compareCallback(array[parent], array[index]) {
                 array.swapAt(parent, index)
                 index = parent
                 continue
@@ -47,26 +53,37 @@ class Heap<T> {
             let right = left + 1
 
             if left < array.count {
-                if callback(array[temp], array[left]) {
+                if compareCallback(array[temp], array[left]) {
                     temp = left
                 }
             }
 
             if right < array.count {
-                if callback(array[temp], array[right]) {
+                if compareCallback(array[temp], array[right]) {
                     temp = right
                 }
             }
 
             if temp == index { return }
             
-            if callback(array[index], array[temp]) {
+            if compareCallback(array[index], array[temp]) {
                 array.swapAt(index, temp)
                 index = temp
                 continue
             }
 
             return 
+        }
+    }
+
+    func remove(_ object: T) {
+        for (index, element) in array.enumerated() {
+            if equalCallback(element, object) {
+                array.swapAt(index, array.count - 1)
+                array.removeLast()
+                if !array.isEmpty { heapifyUP(index) }
+                return
+            }
         }
     }
 }
