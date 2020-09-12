@@ -1,16 +1,15 @@
 import Foundation
 
-class Heap<T> {
+class Heap<T: Hashable & Equatable> {
     var array: [T] = [T]()
+    var map = [T: Int]()
     var compareCallback: (T, T) -> Bool
-    var equalCallback: (T, T) -> Bool?
     var top: T? {
         return array.first
     }
 
-    init(_ compareCallback: @escaping (T, T) -> Bool, _ equalCallback: @escaping (T, T) -> Bool = nil) {
+    init(_ compareCallback: @escaping (T, T) -> Bool) {
         self.compareCallback = compareCallback
-        self.equalCallback = equalCallback
     }
 
     func enqueue(_ element: T) {
@@ -20,8 +19,8 @@ class Heap<T> {
 
     func dequeue() -> T? {
         if array.isEmpty { return nil }
-        array.swapAt(0, array.count - 1)
-        let last = array.removeLast()
+        swapAt(0, array.count - 1)
+        let last = removeLast()
         heapifyDown()
         return last
     }
@@ -32,11 +31,11 @@ class Heap<T> {
             index = start
         }
 
-        while 0 <= index {
+        while 0 <= index && index < array.count {
             let parent = index >> 1
             if parent == index { return }
             if compareCallback(array[parent], array[index]) {
-                array.swapAt(parent, index)
+                swapAt(parent, index)
                 index = parent
                 continue
             }
@@ -45,8 +44,11 @@ class Heap<T> {
         }
     }
 
-    func heapifyDown() {
+    func heapifyDown(_ start: Int? = nil) {
         var index = 0
+        if let start = start {
+            index = start
+        }
         while index < array.count {
             var temp = index
             let left = index * 2
@@ -67,7 +69,7 @@ class Heap<T> {
             if temp == index { return }
             
             if compareCallback(array[index], array[temp]) {
-                array.swapAt(index, temp)
+                swapAt(index, temp)
                 index = temp
                 continue
             }
@@ -77,14 +79,22 @@ class Heap<T> {
     }
 
     func remove(_ object: T) {
-        for (index, element) in array.enumerated() {
-            if equalCallback(element, object) {
-                array.swapAt(index, array.count - 1)
-                array.removeLast()
-                if !array.isEmpty { heapifyUP(index) }
-                return
-            }
-        }
+        guard let index = map[object] else { return }
+        swapAt(index, array.count - 1)
+        removeLast()
+        heapifyUP(index)
+        heapifyDown(index)
+    }
+
+    func swapAt(_ first: Int, _ second: Int) {
+        map[array[first]] = second
+        map[array[second]] = first
+        array.swapAt(first, second)
+    }
+
+    func removeLast() -> T? {
+        let index = array.count - 1
+        map[array[index]] = nil
+        return array.removeLast()
     }
 }
-
