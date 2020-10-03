@@ -104,7 +104,7 @@ class Heap<T: Hashable & Equatable> {
     func removeLast() -> T? {
         let index = array.count - 1
         map[array[index]]?.remove(index)
-        if array.isEmpty { return array.removeLast() }
+        if !array.isEmpty { return array.removeLast() }
         return nil
     }
 }
