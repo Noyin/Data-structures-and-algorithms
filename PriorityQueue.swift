@@ -40,7 +40,7 @@ class Heap<T: Hashable & Equatable> {
                 continue
             }
 
-            return
+            return 
         }
     }
 
@@ -55,26 +55,26 @@ class Heap<T: Hashable & Equatable> {
             let right = left + 1
 
             if left < array.count {
-                if compareCallback(array[left], array[temp]) {
+                if compareCallback(array[temp], array[left]) {
                     temp = left
                 }
             }
 
             if right < array.count {
-                if compareCallback(array[right], array[temp]) {
+                if compareCallback(array[temp], array[right]) {
                     temp = right
                 }
             }
 
             if temp == index { return }
-
+            
             if compareCallback(array[index], array[temp]) {
                 swapAt(index, temp)
                 index = temp
                 continue
             }
 
-            return
+            return 
         }
     }
 
@@ -84,8 +84,8 @@ class Heap<T: Hashable & Equatable> {
             swapAt(index, array.count - 1)
             removeLast()
             last = index
-
-        }
+           
+        } 
 
         heapifyUP(last)
         heapifyDown(last)
@@ -108,4 +108,3 @@ class Heap<T: Hashable & Equatable> {
         return nil
     }
 }
-
