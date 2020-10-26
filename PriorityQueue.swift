@@ -55,13 +55,13 @@ class Heap<T: Hashable & Equatable> {
             let right = left + 1
 
             if left < array.count {
-                if compareCallback(array[temp], array[left]) {
+                if compareCallback(array[left], array[temp]) {
                     temp = left
                 }
             }
 
             if right < array.count {
-                if compareCallback(array[temp], array[right]) {
+                if compareCallback(array[right], array[temp]) {
                     temp = right
                 }
             }
