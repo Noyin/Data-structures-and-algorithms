@@ -40,7 +40,7 @@ class Heap<T: Hashable & Equatable> {
                 continue
             }
 
-            return 
+            return
         }
     }
 
@@ -67,14 +67,14 @@ class Heap<T: Hashable & Equatable> {
             }
 
             if temp == index { return }
-            
+
             if compareCallback(array[index], array[temp]) {
                 swapAt(index, temp)
                 index = temp
                 continue
             }
 
-            return 
+            return
         }
     }
 
@@ -84,8 +84,8 @@ class Heap<T: Hashable & Equatable> {
             swapAt(index, array.count - 1)
             removeLast()
             last = index
-           
-        } 
+
+        }
 
         heapifyUP(last)
         heapifyDown(last)
@@ -108,3 +108,4 @@ class Heap<T: Hashable & Equatable> {
         return nil
     }
 }
+
