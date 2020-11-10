@@ -55,20 +55,20 @@ class Heap<T: Hashable & Equatable> {
             let right = left + 1
 
             if left < array.count {
-                if compareCallback(array[temp], array[left]) {
+                if compareCallback(array[left], array[temp]) {
                     temp = left
                 }
             }
 
             if right < array.count {
-                if compareCallback(array[temp], array[right]) {
+                if compareCallback(array[right], array[temp]) {
                     temp = right
                 }
             }
 
             if temp == index { return }
             
-            if compareCallback(array[index], array[temp]) {
+            if compareCallback(array[temp], array[index]) {
                 swapAt(index, temp)
                 index = temp
                 continue
