@@ -1,0 +1,23 @@
+
+class Combinations {
+    static func permutate(_ array: [Int], _ left: Int, _ right: Int, _ size: Int) -> [[Int]] {
+        Array(Combinations.permutateHelper(array, left, right, size))
+    }
+
+    private static func permutateHelper(_ array: [Int], _ left: Int, _ right: Int, _ size: Int) -> Set<[Int]> {
+        var res = Set<[Int]>()
+        var array = array
+        if left >= right {
+            res.insert(Array(array[0..<size]))
+            return
+        }
+        
+        for i in left...right {
+            array.swapAt(left, i)
+            res += permutate(array, left + 1, right, size)
+            array.swapAt(left, i)
+        }
+        
+        return res
+    }
+}
