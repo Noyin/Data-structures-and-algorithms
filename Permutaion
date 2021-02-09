@@ -23,7 +23,7 @@ class Combinations {
     }
   
     // n choose k
-    static func combos<T>(elements: ArraySlice<T>, k: Int) -> [[T]] {
+    static func combos<T>(_ elements: [T], _ k: Int) -> [[T]] {
         if k == 0 {
             return [[]]
         }
@@ -33,15 +33,12 @@ class Combinations {
         }
 
         let head = [first]
-        var temp = elements
-        let subcombos = combos(elements: temp.dropFirst(), k: k - 1)
+        var elements = elements
+        elements.removeFirst()
+        let subcombos = combos(elements, k - 1)
         var ret = subcombos.map { head + $0 }
-        ret += combos(elements: elements.dropFirst(), k: k)
+        ret += combos(elements, k)
 
         return ret
-    }
-
-    static func combos<T>(_ elements: Array<T>, _ k: Int) -> [[T]] {
-        return combos(elements: ArraySlice(elements), k: k)
     }
 }
