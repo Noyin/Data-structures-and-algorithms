@@ -1,13 +1,13 @@
-func gcd(a:Int, b:Int) -> Int {
+func gcd(_ a:Int, _ b:Int) -> Int {
     if a == b {
         return a
     }
     else {
         if a > b {
-            return gcd(a:a-b,b:b)
+            return gcd(a-b, b)
         }
         else {
-            return gcd(a:a,b:b-a)
+            return gcd(a, b-a)
         }
     }
 }
