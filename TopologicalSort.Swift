@@ -1,4 +1,4 @@
-        func topologocalSort() -> [Int] {
+        func topologicalSort(_ prerequisites: [[Int]]) -> [Int] {
             guard !prerequisites.isEmpty else { return [] }
             var graph = [Int: [Int]]()
             var indegree = Array(repeating: 0, count: numCourses)
