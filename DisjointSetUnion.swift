@@ -8,8 +8,8 @@ class DSU {
     }
     
     init(_ n: Int) {
-        self.parent = Array(0...(n + 1))
-        self.rank = Array(repeating: 1, count: n + 1)
+        self.parent = Array(0..<n)
+        self.rank = Array(repeating: 1, count: n)
     }
     
     func find(_ a: Int) -> Int {
