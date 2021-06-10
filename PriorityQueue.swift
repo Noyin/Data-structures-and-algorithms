@@ -25,12 +25,13 @@ class Heap<T: Equatable>: CustomStringConvertible {
     }
 
     func heapifyUP(_ start: Int? = nil) {
-        var index = array.count - 1
+        let len = array.count
+        var index = len - 1
         if let start = start {
             index = start
         }
 
-        while 0 <= index && index < array.count {
+        while 0 <= index && index < len {
             let parent = index >> 1
             if parent == index { return }
             if compareCallback(array[index], array[parent]) {
@@ -48,18 +49,19 @@ class Heap<T: Equatable>: CustomStringConvertible {
         if let start = start {
             index = start
         }
-        while index < array.count {
+        let len = array.count
+        while index < len {
             var temp = index
             let left = (index * 2)
             let right = (index * 2) + 1
 
-            if left < array.count {
+            if left < len {
                 if compareCallback(array[left], array[temp]) {
                     temp = left
                 }
             }
 
-            if right < array.count {
+            if right < len {
                 if compareCallback(array[right], array[temp]) {
                     temp = right
                 }
