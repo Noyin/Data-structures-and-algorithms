@@ -7,7 +7,7 @@ class FloydWarshall {
   // init
   
   init(number: Int, graph: [[Int]]) {
-    dp = Array(repeating: Array(repeating: 1000000007, count: n + 1), count: n + 1)
+    var dp = Array(repeating: Array(repeating: 1000000007, count: n + 1), count: n + 1)
     self.graph = graph
   }
   
