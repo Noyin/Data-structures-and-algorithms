@@ -11,3 +11,7 @@ func gcd(_ a:Int, _ b:Int) -> Int {
         }
     }
 }
+   
+func lcm(_ x: Int, _ y: Int) -> Int {
+   return x / gcd(x, y) * y
+}
