@@ -1,6 +1,4 @@
-import Foundation
-
-class DSU {
+struct DSU {
     var parent: [Int]
     var rank: [Int]
     var size: Int {
@@ -10,17 +8,19 @@ class DSU {
     init(_ n: Int) {
         self.parent = Array(0..<n)
         self.rank = Array(repeating: 1, count: n)
+         parent = [Int](0..<n)
+         rank = [Int](repeating: 0, count: n)
     }
     
-    func find(_ a: Int) -> Int {
+    mutating func find(_ a: Int) -> Int {
         if a == parent[a] {
             return a
         }
-        
-        return find(parent[a])
+        parent[a] = find(parent[a])
+        return parent[a]
     }
     
-    func union(_ a: Int, _ b: Int) -> Bool {
+    mutating func union(_ a: Int, _ b: Int) -> Bool {
         var i = find(a)
         var j = find(b)
         if i != j {
