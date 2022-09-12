@@ -16,39 +16,65 @@ class SegmentTree: CustomStringConvertible {
     
     
     private func build() {
-        var tempMax = [array]
-        var tempMin = [array]
-        
-        while let lastMax = tempMax.last, let lastMin = tempMin.last, lastMax.count > 1 {
-            var currentMax = [Int]()
-            var currentMin = [Int]()
-            let count = lastMax.count
-        
-            for i in 0..<count where i % 2 == 0 {
-                if i + 1 < count {
-                    currentMax.append(max(lastMax[i], lastMax[i + 1]))
-                    currentMin.append(min(lastMin[i], lastMin[i + 1]))
-                } else {
-                    currentMax.append(lastMax[i])
-                    currentMin.append(lastMin[i])
-                }
-            }
-            
-            tempMax.append(currentMax)
-            tempMin.append(currentMin)
+        var power = 1
+        let count = array.count
+        while power < count {
+            power *= 2
         }
         
-        let count = tempMax.count
+        let len = (power * 2) - 1
         
-        for i in (0..<count).reversed() {
-            maximum.append(contentsOf: tempMax[i])
-            minimum.append(contentsOf: tempMin[i])
+        maximum = Array(repeating: 0, count: len)
+        minimum = Array(repeating: 0, count: len)
+        lazyMaximum = Array(repeating: 0, count: len)
+        lazyMinimum = Array(repeating: 0, count: len)
+        
+        buildMaxHelper(0, count - 1, 0)
+        buildMinHelper(0, count - 1, 0)
+    }
+
+    private func buildMaxHelper(_ low: Int, _ high: Int, _ pos: Int) {
+        let count = maximum.count
+        if pos >= count { return }
+        if low == high { 
+            maximum[pos] = array[low]
+            return
         }
         
-        lazyMaximum = Array(repeating: 0, count: maximum.count)
-        lazyMinimum = Array(repeating: 0, count: minimum.count)
+        let mid = (low + high) >> 1
+        buildMaxHelper(low, mid, (2 * pos) + 1)
+        buildMaxHelper(mid + 1, high, (2 * pos) + 2)
+        
+        if (2 * pos) + 1 < count {
+            maximum[pos] =  maximum[(2 * pos) + 1]
+        }
+
+        if (2 * pos) + 2 < count {
+            maximum[pos] =  max(maximum[pos], maximum[(2 * pos) + 1])
+        }
     }
     
+     private func buildMinHelper(_ low: Int, _ high: Int, _ pos: Int) {
+        let count = minimum.count
+        if pos >= count { return }
+        if low == high { 
+            minimum[pos] = array[low]
+            return
+        }
+        
+        let mid = (low + high) >> 1
+        buildMinHelper(low, mid, (2 * pos) + 1)
+        buildMinHelper(mid + 1, high, (2 * pos) + 2)
+        
+        if (2 * pos) + 1 < count {
+            minimum[pos] =  minimum[(2 * pos) + 1]
+        }
+
+        if (2 * pos) + 2 < count {
+            minimum[pos] =  min(minimum[pos], minimum[(2 * pos) + 1])
+        }
+    }
+
     func getMin(_ start: Int, _ end: Int) -> Int {
         let count = array.count
         return getMinHelper(start, end, 0, count - 1, 0)
@@ -116,7 +142,7 @@ class SegmentTree: CustomStringConvertible {
         incrementMinHelper(start, end, mid + 1, high, (2 * pos) + 2, delta)
         
         if (2 * pos) + 1 < count {
-            minimum[pos] = min(minimum[pos], minimum[(2 * pos) + 1])
+            minimum[pos] = minimum[(2 * pos) + 1]
         }
         
         if (2 * pos) + 2 < count {
@@ -191,7 +217,7 @@ class SegmentTree: CustomStringConvertible {
         incrementMaxHelper(start, end, mid + 1, high, (2 * pos) + 2, delta)
         
         if (2 * pos) + 1 < count {
-            maximum[pos] = max(maximum[pos], maximum[(2 * pos) + 1])
+            maximum[pos] = maximum[(2 * pos) + 1]
         }
         
         if (2 * pos) + 2 < count {
