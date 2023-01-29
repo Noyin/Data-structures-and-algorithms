@@ -1,17 +1,14 @@
-func fastPow(_ n, _ mod: Int) -> Int {
-  var n = n 
-  var res = 1
-  var base = 2
+ func fastPow(_ base: Int, _ power: Int, _ mod: Int) -> Int {
+    var result = 1
+    var b = base
+    var p = power
+    while p > 0 {
+        if p & 1 == 1 {
+            result = (result * b) % mod
+        }
+        b = (b * b) % mod
+        p = p >> 1
+    }
 
-  while n > 0 {
-      if n % 2 == 1 {
-          res = (res * base) % mod
-      }
-
-      base = (base * base) % mod
-
-      n >>= 1
-  }
-  
-  return res
+    return result % mod
 }
