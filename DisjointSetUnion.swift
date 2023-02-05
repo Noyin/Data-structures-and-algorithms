@@ -8,8 +8,6 @@ struct DSU {
     init(_ n: Int) {
         self.parent = Array(0..<n)
         self.rank = Array(repeating: 1, count: n)
-         parent = [Int](0..<n)
-         rank = [Int](repeating: 0, count: n)
     }
     
     mutating func find(_ a: Int) -> Int {
